@@ -68,19 +68,11 @@ echo(options: { value: string; }) => Promise<{ value: string; }>
 
 ## Android setup
 
-Make sure your Android host app includes the OneSignal SDK and the runtime notification permission (Android 13+):
+Make sure your Android host app includes the runtime notification permission (Android 13+) and that native dependencies are installed:
 
-1. In your host app's `build.gradle` (app module) add the OneSignal dependency:
-
-```groovy
-implementation 'com.onesignal:OneSignal:4.9.4'
-```
-
-2. Add the POST_NOTIFICATIONS permission to your `AndroidManifest.xml` (required for Android 13+):
+1. Add the POST_NOTIFICATIONS permission to your `AndroidManifest.xml` (required for Android 13+):
 
 ```xml
 <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 ```
-
-3. If you get a Gradle SDK error when building locally, ensure `local.properties` contains `sdk.dir=/path/to/Android/sdk` or set the `ANDROID_HOME` environment variable.
 
