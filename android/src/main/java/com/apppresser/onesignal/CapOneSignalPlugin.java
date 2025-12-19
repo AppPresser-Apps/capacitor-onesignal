@@ -15,14 +15,6 @@ public class CapOneSignalPlugin extends Plugin {
     private CapOneSignal implementation = new CapOneSignal();
 
     @PluginMethod
-    public void echo(PluginCall call) {
-        String value = call.getString("value");
-        JSObject ret = new JSObject();
-        ret.put("value", implementation.echo(value));
-        call.resolve(ret);
-    }
-
-    @PluginMethod
     public void initialize(PluginCall call) {
         String appId = call.getString("appId");
         if (appId == null || appId.isEmpty()) {

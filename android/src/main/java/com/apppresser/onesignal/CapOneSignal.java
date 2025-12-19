@@ -13,11 +13,6 @@ import com.onesignal.OneSignal;
 
 public class CapOneSignal {
 
-    public String echo(String value) {
-        Logger.info("Echo", value);
-        return value;
-    }
-
     /**
      * Initialize OneSignal with application context and appId.
      */

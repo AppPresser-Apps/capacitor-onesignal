@@ -17,7 +17,6 @@ npx cap sync
 
 * [`initialize(...)`](#initialize)
 * [`requestPermission(...)`](#requestpermission)
-* [`echo(...)`](#echo)
 
 </docgen-index>
 
