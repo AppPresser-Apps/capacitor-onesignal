@@ -1,6 +1,6 @@
 # capacitor-onesignal
 
-Capactior plugin for OneSignal Push notifications
+Capactior plugin for OneSignal Push notifications for Capcitor 8+ Swift Package Manager
 
 ## Install
 
