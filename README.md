@@ -2,6 +2,8 @@
 
 Capactior plugin for OneSignal Push notifications for Capcitor 8+ Swift Package Manager
 
+THIS PLUGIN IS IN DEVELOPMENT. USE AT YOUR OWN RISK! 
+
 ## Install
 
 ```bash
