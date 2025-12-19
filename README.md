@@ -53,13 +53,3 @@ requestPermission(options?: { fallbackToSettings?: boolean | undefined; } | unde
 
 </docgen-api>
 
-## Android setup
-
-Make sure your Android host app includes the runtime notification permission (Android 13+) and that native dependencies are installed:
-
-1. Add the POST_NOTIFICATIONS permission to your `AndroidManifest.xml` (required for Android 13+):
-
-```xml
-<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-```
-
