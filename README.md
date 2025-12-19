@@ -1,11 +1,11 @@
-# capacitor--onesignal
+# capacitor-onesignal
 
 Capactior plugin for OneSignal Push notifications
 
 ## Install
 
 ```bash
-npm install capacitor--onesignal
+npm install capacitor-onesignal
 npx cap sync
 ```
 

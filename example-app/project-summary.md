@@ -1,6 +1,6 @@
 ## Capacitor Plugins
 
-- 🟧 capacitor--onesignal - Requires manual developer maintenance as it custom / forked.
+- 🟧 capacitor-onesignal - Requires manual developer maintenance as it custom / forked.
 ## Cordova Plugins
 
 ## Dependencies
