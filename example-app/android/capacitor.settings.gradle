@@ -2,5 +2,5 @@
 include ':capacitor-android'
 project(':capacitor-android').projectDir = new File('../node_modules/@capacitor/android/capacitor')
 
-include ':capacitor--onesignal'
-project(':capacitor--onesignal').projectDir = new File('../../android')
+include ':capacitor-onesignal'
+project(':capacitor-onesignal').projectDir = new File('../../android')

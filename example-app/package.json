@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@capacitor/core": "latest",
-    "capacitor--onesignal": "file:..",
+    "capacitor-onesignal": "file:..",
     "@capacitor/ios": "8.0.0",
     "@capacitor/android": "8.0.0"
   },

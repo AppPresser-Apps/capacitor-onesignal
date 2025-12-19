@@ -1,5 +1,5 @@
 {
-  "name": "capacitor--onesignal",
+  "name": "capacitor-onesignal",
   "version": "0.0.1",
   "description": "Capactior plugin for OneSignal Push notifications",
   "main": "dist/plugin.cjs.js",
