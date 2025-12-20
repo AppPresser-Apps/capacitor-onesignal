@@ -16,14 +16,14 @@ public class CapOneSignal {
     /**
      * Initialize OneSignal with application context and appId.
      */
-    public void initialize(Context ctx, String appId) {
-        if (appId == null || appId.isEmpty()) {
-            Logger.warn("CapOneSignal", "initialize: appId is null/empty");
+    public void initialize(Context ctx, String appID) {
+        if (appID == null || appID.isEmpty()) {
+            Logger.warn("CapOneSignal", "initialize: appID is null/empty");
             return;
         }
         // Use the OneSignal v5+ API to initialize with the App ID
-        OneSignal.initWithContext(ctx.getApplicationContext(), appId);
-        Logger.info("CapOneSignal", "OneSignal initialized with appId: " + appId);
+        OneSignal.initWithContext(ctx.getApplicationContext(), appID);
+        Logger.info("CapOneSignal", "OneSignal initialized with appID: " + appID);
     }
 
     /**
@@ -52,14 +52,14 @@ public class CapOneSignal {
     /**
      * Set an external user id for OneSignal (v5 API: login).
      */
-    public void setExternalUserId(String externalUserId) {
-        if (externalUserId == null || externalUserId.isEmpty()) {
-            Logger.warn("CapOneSignal", "setExternalUserId: externalUserId is null/empty");
+    public void setExternalUserId(String userID) {
+        if (userID == null || userID.isEmpty()) {
+            Logger.warn("CapOneSignal", "setExternalUserId: userID is null/empty");
             return;
         }
-        // Use login() to associate the current subscription with an external id
-        OneSignal.login(externalUserId);
-        Logger.info("CapOneSignal", "setExternalUserId (login): " + externalUserId);
+        // Use setExternalUserId() to associate the current subscription with an external id
+        OneSignal.login(userID);
+        Logger.info("CapOneSignal", "setExternalUserId (login): " + userID);
     }
 
     /**

@@ -13,8 +13,8 @@ export class CapOneSignalWeb extends WebPlugin implements CapOneSignalPlugin {
     return { accepted: false };
   }
 
-  async initialize(options: { appId: string; }): Promise<void> {
-    console.log('OneSignal Web initialize called with appId:', options.appId);
+  async initialize(options: { appID: string; }): Promise<void> {
+    console.log('OneSignal Web initialize called with appID:', options.appID);
     // Web-specific initialization logic can be added here
   }
 

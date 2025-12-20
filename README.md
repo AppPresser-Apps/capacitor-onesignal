@@ -28,12 +28,12 @@ npx cap sync
 ### initialize(...)
 
 ```typescript
-initialize(options: { appId: string; }) => Promise<void>
+initialize(options: { appID: string; }) => Promise<void>
 ```
 
 | Param         | Type                            |
 | ------------- | ------------------------------- |
-| **`options`** | <code>{ appId: string; }</code> |
+| **`options`** | <code>{ appID: string; }</code> |
 
 --------------------
 

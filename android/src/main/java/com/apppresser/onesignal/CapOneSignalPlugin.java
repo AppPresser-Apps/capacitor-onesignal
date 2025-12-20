@@ -16,9 +16,9 @@ public class CapOneSignalPlugin extends Plugin {
 
     @PluginMethod
     public void initialize(PluginCall call) {
-        String appId = call.getString("appId");
+        String appId = call.getString("appID");
         if (appId == null || appId.isEmpty()) {
-            call.reject("appId is required");
+            call.reject("appID is required");
             return;
         }
 
@@ -46,9 +46,9 @@ public class CapOneSignalPlugin extends Plugin {
 
     @PluginMethod
     public void setExternalUserId(PluginCall call) {
-        String userId = call.getString("userId");
+        String userId = call.getString("userID");
         if (userId == null || userId.isEmpty()) {
-            call.reject("userId is required");
+            call.reject("userID is required");
             return;
         }
 
