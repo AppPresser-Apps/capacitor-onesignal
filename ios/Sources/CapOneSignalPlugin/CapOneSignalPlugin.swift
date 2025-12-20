@@ -36,11 +36,11 @@ public class CapOneSignalPlugin: CAPPlugin, CAPBridgedPlugin {
     }
 
    @objc func setExternalUserId(_ call: CAPPluginCall) {
-        guard let externalUserId = call.getString("externalUserId") else {
+        guard let userID = call.getString("userID") else {
             call.reject("externalUserId is required")
             return
         }
-        implementation.setExternalUserId(externalUserId)
+        implementation.setExternalUserId(userID)
         call.resolve()
     }
 

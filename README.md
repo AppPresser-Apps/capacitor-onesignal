@@ -56,12 +56,12 @@ requestPermission(options?: { fallbackToSettings?: boolean | undefined; } | unde
 ### setExternalUserId(...)
 
 ```typescript
-setExternalUserId(options: { userId: string; }) => Promise<void>
+setExternalUserId(options: { userID: string; }) => Promise<void>
 ```
 
 | Param         | Type                             |
 | ------------- | -------------------------------- |
-| **`options`** | <code>{ userId: string; }</code> |
+| **`options`** | <code>{ userID: string; }</code> |
 
 --------------------
 

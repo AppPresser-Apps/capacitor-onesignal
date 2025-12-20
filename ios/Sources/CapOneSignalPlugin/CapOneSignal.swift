@@ -5,7 +5,7 @@ import OneSignalFramework
 
     @objc public func initialize(_ appId: String) {
         print("Initializing OneSignal with App ID: \(appId)")
-        OneSignal.Debug.setLogLevel(.LL_VERBOSE)
+        //OneSignal.Debug.setLogLevel(.LL_VERBOSE)
         OneSignal.initialize(appId)
     }
 
@@ -17,9 +17,9 @@ import OneSignalFramework
         })
     }
 
-    public func setExternalUserId(_ userId: String) {
-        print("Setting external user ID to: \(userId)")
-        OneSignal.login(userId)
+    public func setExternalUserId(_ userID: String) {
+        print("Setting external user ID to: \(userID)")
+        OneSignal.login(userID)
     }
 
     public func clearExternalUserId() {
