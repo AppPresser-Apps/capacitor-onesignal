@@ -43,4 +43,24 @@ public class CapOneSignalPlugin extends Plugin {
         ret.put("accepted", granted);
         call.resolve(ret);
     }
+
+    @PluginMethod
+    public void setExternalUserId(PluginCall call) {
+        String userId = call.getString("userId");
+        if (userId == null || userId.isEmpty()) {
+            call.reject("userId is required");
+            return;
+        }
+
+        implementation.setExternalUserId(userId);
+
+        call.resolve();
+    }
+
+    @PluginMethod
+    public void clearExternalUserId(PluginCall call) {
+        implementation.clearExternalUserId();
+
+        call.resolve();
+    }
 }

@@ -17,6 +17,8 @@ npx cap sync
 
 * [`initialize(...)`](#initialize)
 * [`requestPermission(...)`](#requestpermission)
+* [`setExternalUserId(...)`](#setexternaluserid)
+* [`clearExternalUserId()`](#clearexternaluserid)
 
 </docgen-index>
 
@@ -47,6 +49,28 @@ requestPermission(options?: { fallbackToSettings?: boolean | undefined; } | unde
 | **`options`** | <code>{ fallbackToSettings?: boolean; }</code> |
 
 **Returns:** <code>Promise&lt;{ accepted: boolean; }&gt;</code>
+
+--------------------
+
+
+### setExternalUserId(...)
+
+```typescript
+setExternalUserId(options: { userId: string; }) => Promise<void>
+```
+
+| Param         | Type                             |
+| ------------- | -------------------------------- |
+| **`options`** | <code>{ userId: string; }</code> |
+
+--------------------
+
+
+### clearExternalUserId()
+
+```typescript
+clearExternalUserId() => Promise<void>
+```
 
 --------------------
 

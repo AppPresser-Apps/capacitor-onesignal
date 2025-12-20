@@ -17,4 +17,14 @@ import OneSignalFramework
         })
     }
 
+    public func setExternalUserId(_ userId: String) {
+        print("Setting external user ID to: \(userId)")
+        OneSignal.login(userId)
+    }
+
+    public func clearExternalUserId() {
+        print("Clearing external user ID")
+        OneSignal.logout()
+    }
+
 }

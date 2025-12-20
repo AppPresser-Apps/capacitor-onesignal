@@ -63,10 +63,10 @@ public class CapOneSignal {
     }
 
     /**
-     * Remove external user id (v5 API: logout).
+     * Clear external user id (v5 API: logout).
      */
-    public void removeExternalUserId() {
+    public void clearExternalUserId() {
         OneSignal.logout();
-        Logger.info("CapOneSignal", "removeExternalUserId (logout) called");
+        Logger.info("CapOneSignal", "clearExternalUserId (logout) called");
     }
 }

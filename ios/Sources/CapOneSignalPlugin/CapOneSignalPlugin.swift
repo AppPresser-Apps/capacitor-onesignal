@@ -11,7 +11,9 @@ public class CapOneSignalPlugin: CAPPlugin, CAPBridgedPlugin {
     public let jsName = "CapOneSignal"
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "initialize", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "requestPermission", returnType: CAPPluginReturnPromise)
+        CAPPluginMethod(name: "requestPermission", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "setExternalUserId", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "clearExternalUserId", returnType: CAPPluginReturnPromise)
     ]
     private let implementation = CapOneSignal()
 
@@ -31,5 +33,19 @@ public class CapOneSignalPlugin: CAPPlugin, CAPBridgedPlugin {
                 "accepted": accepted
             ])
         }
+    }
+
+   @objc func setExternalUserId(_ call: CAPPluginCall) {
+        guard let externalUserId = call.getString("externalUserId") else {
+            call.reject("externalUserId is required")
+            return
+        }
+        implementation.setExternalUserId(externalUserId)
+        call.resolve()
+    }
+
+    @objc func clearExternalUserId(_ call: CAPPluginCall) {
+        implementation.clearExternalUserId()
+        call.resolve()
     }
 }
