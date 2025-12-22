@@ -17,6 +17,7 @@ npx cap sync
 
 * [`initialize(...)`](#initialize)
 * [`requestPermission(...)`](#requestpermission)
+* [`setLogLevel(...)`](#setloglevel)
 * [`setExternalUserId(...)`](#setexternaluserid)
 * [`clearExternalUserId()`](#clearexternaluserid)
 
@@ -49,6 +50,19 @@ requestPermission(options?: { fallbackToSettings?: boolean | undefined; } | unde
 | **`options`** | <code>{ fallbackToSettings?: boolean; }</code> |
 
 **Returns:** <code>Promise&lt;{ accepted: boolean; }&gt;</code>
+
+--------------------
+
+
+### setLogLevel(...)
+
+```typescript
+setLogLevel(options: { level: string; }) => Promise<void>
+```
+
+| Param         | Type                            |
+| ------------- | ------------------------------- |
+| **`options`** | <code>{ level: string; }</code> |
 
 --------------------
 

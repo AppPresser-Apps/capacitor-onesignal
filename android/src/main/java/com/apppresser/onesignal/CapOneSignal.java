@@ -27,6 +27,56 @@ public class CapOneSignal {
     }
 
     /**
+     * Set OneSignal log level. Accepts: VERBOSE, DEBUG, INFO, WARN, WARNING, ERROR, NONE
+     */
+    public void setLogLevel(String level) {
+        if (level == null || level.isEmpty()) {
+            Logger.warn("CapOneSignal", "setLogLevel: level is null/empty");
+            return;
+        }
+        String upper = level.toUpperCase();
+        OneSignal.LOG_LEVEL logLevel = OneSignal.LOG_LEVEL.INFO;
+        switch (upper) {
+            case "VERBOSE":
+                logLevel = OneSignal.LOG_LEVEL.VERBOSE;
+                break;
+            case "DEBUG":
+                logLevel = OneSignal.LOG_LEVEL.DEBUG;
+                break;
+            case "INFO":
+                logLevel = OneSignal.LOG_LEVEL.INFO;
+                break;
+            case "WARN":
+            case "WARNING":
+                logLevel = OneSignal.LOG_LEVEL.WARN;
+                break;
+            case "ERROR":
+                logLevel = OneSignal.LOG_LEVEL.ERROR;
+                break;
+            case "NONE":
+                logLevel = OneSignal.LOG_LEVEL.NONE;
+                break;
+            default:
+                Logger.warn("CapOneSignal", "Unknown log level: " + level + ", defaulting to INFO");
+                logLevel = OneSignal.LOG_LEVEL.INFO;
+        }
+
+        // Set SDK log level (verbose/debug/info/warn/error/none). The second parameter controls visual level; choose NONE for minimal visual logs.
+        try {
+            OneSignal.setLogLevel(logLevel, OneSignal.LOG_LEVEL.NONE);
+            Logger.info("CapOneSignal", "OneSignal log level set to: " + upper);
+        } catch (NoSuchMethodError | IncompatibleClassChangeError e) {
+            // Fallback if single-arg setLogLevel exists (older/newer SDKs)
+            try {
+                OneSignal.setLogLevel(logLevel);
+                Logger.info("CapOneSignal", "OneSignal log level set (single-arg) to: " + upper);
+            } catch (Exception ex) {
+                Logger.warn("CapOneSignal", "Failed to set OneSignal log level: " + ex.getMessage());
+            }
+        }
+    }
+
+    /**
      * Return whether notifications are enabled for the app.
      */
     public boolean areNotificationsEnabled(Context ctx) {

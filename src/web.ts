@@ -18,6 +18,11 @@ export class CapOneSignalWeb extends WebPlugin implements CapOneSignalPlugin {
     // Web-specific initialization logic can be added here
   }
 
+  async setLogLevel(options: { level: string; }): Promise<void> {
+    console.log('OneSignal Web setLogLevel called with level:', options.level);
+    // Web-specific setLogLevel logic can be added here (no-op for web)
+  }
+
   async setExternalUserId(options: { userID: string; }): Promise<void> {
     console.log('OneSignal Web setExternalUserId called with userId:', options.userID);
     // Web-specific setExternalUserId logic can be added here

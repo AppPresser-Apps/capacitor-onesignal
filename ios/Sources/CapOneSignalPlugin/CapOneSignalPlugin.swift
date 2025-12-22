@@ -1,10 +1,8 @@
-import Foundation
 import Capacitor
+import Foundation
 
-/**
- * Please read the Capacitor iOS Plugin Development Guide
- * here: https://capacitorjs.com/docs/plugins/ios
- */
+/// Please read the Capacitor iOS Plugin Development Guide
+/// here: https://capacitorjs.com/docs/plugins/ios
 @objc(CapOneSignalPlugin)
 public class CapOneSignalPlugin: CAPPlugin, CAPBridgedPlugin {
     public let identifier = "CapOneSignalPlugin"
@@ -12,17 +10,27 @@ public class CapOneSignalPlugin: CAPPlugin, CAPBridgedPlugin {
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "initialize", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "requestPermission", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "setLogLevel", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "setExternalUserId", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "clearExternalUserId", returnType: CAPPluginReturnPromise)
+        CAPPluginMethod(name: "clearExternalUserId", returnType: CAPPluginReturnPromise),
     ]
     private let implementation = CapOneSignal()
 
     @objc func initialize(_ call: CAPPluginCall) {
-        guard let appId = call.getString("appId") else {
+        guard let appID = call.getString("appID") else {
             call.reject("appId is required")
             return
         }
-        implementation.initialize(appId)
+        implementation.initialize(appID)
+        call.resolve()
+    }
+
+    @objc func setLogLevel(_ call: CAPPluginCall) {
+        guard let level = call.getString("level") else {
+            call.reject("level is required")
+            return
+        }
+        implementation.setLogLevel(level)
         call.resolve()
     }
 
@@ -35,7 +43,7 @@ public class CapOneSignalPlugin: CAPPlugin, CAPBridgedPlugin {
         }
     }
 
-   @objc func setExternalUserId(_ call: CAPPluginCall) {
+    @objc func setExternalUserId(_ call: CAPPluginCall) {
         guard let userID = call.getString("userID") else {
             call.reject("externalUserId is required")
             return

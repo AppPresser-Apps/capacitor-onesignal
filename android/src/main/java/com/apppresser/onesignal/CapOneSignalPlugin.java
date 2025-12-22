@@ -58,6 +58,19 @@ public class CapOneSignalPlugin extends Plugin {
     }
 
     @PluginMethod
+    public void setLogLevel(PluginCall call) {
+        String level = call.getString("level");
+        if (level == null || level.isEmpty()) {
+            call.reject("level is required");
+            return;
+        }
+
+        implementation.setLogLevel(level);
+
+        call.resolve();
+    }
+
+    @PluginMethod
     public void clearExternalUserId(PluginCall call) {
         implementation.clearExternalUserId();
 
