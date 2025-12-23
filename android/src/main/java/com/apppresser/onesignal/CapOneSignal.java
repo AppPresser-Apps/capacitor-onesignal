@@ -5,11 +5,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
-
 import androidx.core.app.NotificationManagerCompat;
-
 import com.getcapacitor.Logger;
 import com.onesignal.OneSignal;
+import com.onesignal.debug.LogLevel;
 
 public class CapOneSignal {
 
@@ -35,44 +34,40 @@ public class CapOneSignal {
             return;
         }
         String upper = level.toUpperCase();
-        OneSignal.LOG_LEVEL logLevel = OneSignal.LOG_LEVEL.INFO;
+
+        // In OneSignal v5, use the LogLevel enum from com.onesignal.debug
+        LogLevel logLevel;
         switch (upper) {
             case "VERBOSE":
-                logLevel = OneSignal.LOG_LEVEL.VERBOSE;
+                logLevel = LogLevel.VERBOSE;
                 break;
             case "DEBUG":
-                logLevel = OneSignal.LOG_LEVEL.DEBUG;
+                logLevel = LogLevel.DEBUG;
                 break;
             case "INFO":
-                logLevel = OneSignal.LOG_LEVEL.INFO;
+                logLevel = LogLevel.INFO;
                 break;
             case "WARN":
             case "WARNING":
-                logLevel = OneSignal.LOG_LEVEL.WARN;
+                logLevel = LogLevel.WARN;
                 break;
             case "ERROR":
-                logLevel = OneSignal.LOG_LEVEL.ERROR;
+                logLevel = LogLevel.ERROR;
                 break;
             case "NONE":
-                logLevel = OneSignal.LOG_LEVEL.NONE;
+                logLevel = LogLevel.NONE;
                 break;
             default:
                 Logger.warn("CapOneSignal", "Unknown log level: " + level + ", defaulting to INFO");
-                logLevel = OneSignal.LOG_LEVEL.INFO;
+                logLevel = LogLevel.INFO;
         }
 
-        // Set SDK log level (verbose/debug/info/warn/error/none). The second parameter controls visual level; choose NONE for minimal visual logs.
+        // Set SDK log level using the Debug manager in v5
         try {
-            OneSignal.setLogLevel(logLevel, OneSignal.LOG_LEVEL.NONE);
+            OneSignal.getDebug().setLogLevel(logLevel);
             Logger.info("CapOneSignal", "OneSignal log level set to: " + upper);
-        } catch (NoSuchMethodError | IncompatibleClassChangeError e) {
-            // Fallback if single-arg setLogLevel exists (older/newer SDKs)
-            try {
-                OneSignal.setLogLevel(logLevel);
-                Logger.info("CapOneSignal", "OneSignal log level set (single-arg) to: " + upper);
-            } catch (Exception ex) {
-                Logger.warn("CapOneSignal", "Failed to set OneSignal log level: " + ex.getMessage());
-            }
+        } catch (Exception e) {
+            Logger.warn("CapOneSignal", "Failed to set OneSignal log level: " + e.getMessage());
         }
     }
 
@@ -89,11 +84,9 @@ public class CapOneSignal {
     public void openNotificationSettings(Context ctx) {
         Intent intent;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            intent = new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
-                    .putExtra(Settings.EXTRA_APP_PACKAGE, ctx.getPackageName());
+            intent = new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).putExtra(Settings.EXTRA_APP_PACKAGE, ctx.getPackageName());
         } else {
-            intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                    .setData(Uri.fromParts("package", ctx.getPackageName(), null));
+            intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).setData(Uri.fromParts("package", ctx.getPackageName(), null));
         }
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         ctx.startActivity(intent);
