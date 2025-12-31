@@ -2,13 +2,21 @@ package com.apppresser.onesignal;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
+
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationManagerCompat;
 import com.getcapacitor.Logger;
 import com.onesignal.OneSignal;
 import com.onesignal.debug.LogLevel;
+
+import com.getcapacitor.PluginCall;
+import com.getcapacitor.PermissionState;
+import android.Manifest;
+import androidx.core.app.ActivityCompat;
 
 public class CapOneSignal {
 
@@ -20,6 +28,18 @@ public class CapOneSignal {
             Logger.warn("CapOneSignal", "initialize: appID is null/empty");
             return;
         }
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            Logger.warn("CapOneSignal", "OneSignal SDK v5 requires Android API 21 (Lollipop) or newer. Device is running API " + Build.VERSION.SDK_INT);
+            return;
+        }
+
+        // Special handling for pre-release versions of Android
+        if (!"REL".equals(Build.VERSION.CODENAME)) {
+            Logger.info("CapOneSignal", "Running on a pre-release version of Android: " + Build.VERSION.CODENAME + ". Enabling verbose logging.");
+            OneSignal.getDebug().setLogLevel(LogLevel.VERBOSE);
+        }
+
         // Use the OneSignal v5+ API to initialize with the App ID
         OneSignal.initWithContext(ctx.getApplicationContext(), appID);
         Logger.info("CapOneSignal", "OneSignal initialized with appID: " + appID);
@@ -71,6 +91,23 @@ public class CapOneSignal {
         }
     }
 
+    public void requestPermission(Context ctx, PluginCall call, boolean fallbackToSettings) {
+        // This method should now ONLY handle the legacy path.
+        // The Android 13+ logic is (and should be) in CapOneSignalPlugin.java.
+
+        boolean granted = areNotificationsEnabled(ctx);
+        Logger.info("CapOneSignal", "Legacy permission check: notifications enabled = " + granted);
+
+        if (!granted && fallbackToSettings) {
+            Logger.info("CapOneSignal", "Notifications are not enabled. Opening settings for user.");
+            openNotificationSettings(ctx);
+        }
+
+        // Always resolve the call for this legacy path. The "status" will be determined
+        // by the calling method in the plugin by re-checking areNotificationsEnabled.
+        call.resolve();
+    }
+
     /**
      * Return whether notifications are enabled for the app.
      */
@@ -112,4 +149,53 @@ public class CapOneSignal {
         OneSignal.logout();
         Logger.info("CapOneSignal", "clearExternalUserId (logout) called");
     }
+
+    /**
+     * Add multiple tags to the user.
+     */
+    public void addTags(java.util.Map<String, String> tags) {
+        if (tags == null || tags.isEmpty()) {
+            Logger.warn("CapOneSignal", "addTags: tags is null/empty");
+            return;
+        }
+        OneSignal.getUser().addTags(tags);
+        Logger.info("CapOneSignal", "addTags: " + tags.toString());
+    }
+
+    /**
+     * Remove multiple tags from the user.
+     */
+    public void removeTags(java.util.Collection<String> tagKeys) {
+        if (tagKeys == null || tagKeys.isEmpty()) {
+            Logger.warn("CapOneSignal", "removeTags: tagKeys is null/empty");
+            return;
+        }
+        OneSignal.getUser().removeTags(tagKeys);
+        Logger.info("CapOneSignal", "removeTags: " + tagKeys.toString());
+    }
+
+    /**
+     * Add a single tag to the user.
+     */
+    public void addTag(String key, String value) {
+        if (key == null || key.isEmpty() || value == null || value.isEmpty()) {
+            Logger.warn("CapOneSignal", "addTag: key or value is null/empty");
+            return;
+        }
+        OneSignal.getUser().addTag(key, value);
+        Logger.info("CapOneSignal", "addTag: " + key + " = " + value);
+    }
+
+    /**
+     * Remove a single tag from the user.
+     */
+    public void removeTag(String key) {
+        if (key == null || key.isEmpty()) {
+            Logger.warn("CapOneSignal", "removeTag: key is null/empty");
+            return;
+        }
+        OneSignal.getUser().removeTag(key);
+        Logger.info("CapOneSignal", "removeTag: " + key);
+    }
+
 }

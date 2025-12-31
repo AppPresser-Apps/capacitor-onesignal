@@ -20,6 +20,10 @@ npx cap sync
 * [`setLogLevel(...)`](#setloglevel)
 * [`setExternalUserId(...)`](#setexternaluserid)
 * [`clearExternalUserId()`](#clearexternaluserid)
+* [`addTags(...)`](#addtags)
+* [`removeTags(...)`](#removetags)
+* [`addTag(...)`](#addtag)
+* [`removeTag(...)`](#removetag)
 
 </docgen-index>
 
@@ -85,6 +89,58 @@ setExternalUserId(options: { userID: string; }) => Promise<void>
 ```typescript
 clearExternalUserId() => Promise<void>
 ```
+
+--------------------
+
+
+### addTags(...)
+
+```typescript
+addTags(options: { tags: { [key: string]: string; }; }) => Promise<void>
+```
+
+| Param         | Type                                               |
+| ------------- | -------------------------------------------------- |
+| **`options`** | <code>{ tags: { [key: string]: string; }; }</code> |
+
+--------------------
+
+
+### removeTags(...)
+
+```typescript
+removeTags(options: { tags: string[]; }) => Promise<void>
+```
+
+| Param         | Type                             |
+| ------------- | -------------------------------- |
+| **`options`** | <code>{ tags: string[]; }</code> |
+
+--------------------
+
+
+### addTag(...)
+
+```typescript
+addTag(options: { tag: string; }) => Promise<void>
+```
+
+| Param         | Type                          |
+| ------------- | ----------------------------- |
+| **`options`** | <code>{ tag: string; }</code> |
+
+--------------------
+
+
+### removeTag(...)
+
+```typescript
+removeTag(options: { tag: string; }) => Promise<void>
+```
+
+| Param         | Type                          |
+| ------------- | ----------------------------- |
+| **`options`** | <code>{ tag: string; }</code> |
 
 --------------------
 

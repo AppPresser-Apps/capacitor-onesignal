@@ -27,9 +27,29 @@ export class CapOneSignalWeb extends WebPlugin implements CapOneSignalPlugin {
     console.log('OneSignal Web setExternalUserId called with userId:', options.userID);
     // Web-specific setExternalUserId logic can be added here
   }
-  
+
   async clearExternalUserId(): Promise<void> {
     console.log('OneSignal Web clearExternalUserId called');
     // Web-specific clearExternalUserId logic can be added here
+  }
+
+  async addTags(options: { tags: { [key: string]: string }; }): Promise<void> {
+    console.log('OneSignal Web addTags called with tags:', options.tags);
+    // Web-specific addTags logic can be added here
+  }
+
+  async removeTags(options: { tags: string[]; }): Promise<void> {
+    console.log('OneSignal Web removeTags called with tags:', options.tags);
+    // Web-specific removeTags logic can be added here
+  }
+
+  async addTag(options: { tag: string; }): Promise<void> {
+    console.log('OneSignal Web sendTag called: ', options.tag);
+    // Web-specific sendTag logic can be added here
+  }
+
+  async removeTag(options: { tag: string; }): Promise<void> {
+    console.log('OneSignal Web sendTags called: ', options.tag);
+    // Web-specific sendTags logic can be added here
   }
 }

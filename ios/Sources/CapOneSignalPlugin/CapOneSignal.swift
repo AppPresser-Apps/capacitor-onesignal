@@ -1,8 +1,6 @@
 import Foundation
 import OneSignalFramework
 
-// NOTE: If you encounter "Invalid redeclaration of 'CapOneSignal'" error, please check for duplicate CapOneSignal class definitions elsewhere in the project.
-
 @objc public class CapOneSignal: NSObject {
 
     @objc public func initialize(_ appID: String) {
@@ -31,6 +29,7 @@ import OneSignalFramework
         }
     }
 
+    
     public func requestPermission(completion: @escaping (Bool) -> Void) {
         print("Requesting push notification permission")
         OneSignal.Notifications.requestPermission({ accepted in
@@ -47,6 +46,26 @@ import OneSignalFramework
     public func clearExternalUserId() {
         print("Clearing external user ID")
         OneSignal.logout()
+    }
+
+    public func addTags(_ tags: [String: String], completion: @escaping (Bool) -> Void) {
+        print("Adding tags: \(tags)")
+        OneSignal.User.addTags(tags)
+    }
+
+    public func removeTags(_ tags: [String], completion: @escaping (Bool) -> Void) {
+        print("Removing tags: \(tags)")
+        OneSignal.User.removeTags(tags)
+    }
+
+    public func sendTag(_ key: String, _ value: String, completion: @escaping (Bool) -> Void) {
+        print("Sending tag: \(key) = \(value)")
+        OneSignal.User.addTags([key: value])
+    }
+
+    public func removeTag(_ key: String, completion: @escaping (Bool) -> Void) {
+        print("Removing tag: \(key)")
+        OneSignal.User.removeTags([key])
     }
 
 }
