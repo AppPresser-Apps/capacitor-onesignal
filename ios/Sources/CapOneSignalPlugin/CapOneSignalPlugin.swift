@@ -1,5 +1,7 @@
 import Capacitor
 import Foundation
+import UIKit
+import OneSignalFramework
 
 /// Please read the Capacitor iOS Plugin Development Guide
 /// here: https://capacitorjs.com/docs/plugins/ios
@@ -18,7 +20,22 @@ public class CapOneSignalPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "addTag", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "removeTag", returnType: CAPPluginReturnPromise),
     ]
-    private let implementation = CapOneSignal()
+    public let implementation = CapOneSignal()
+
+    override public func load() {
+        // Register the click listener early so it catches cold start clicks
+        OneSignal.Notifications.addClickListener(CapOneSignal.shared)
+        
+        // Listen for application launch to handle launch options
+        NotificationCenter.default.addObserver(self, selector: #selector(handleDidFinishLaunching(_:)), name: UIApplication.didFinishLaunchingNotification, object: nil)
+    }
+
+    @objc func handleDidFinishLaunching(_ notification: Notification) {
+        if let userInfo = notification.userInfo as? [UIApplication.LaunchOptionsKey: Any] {
+            // Check for remote notification in launch options and handle deep link
+            implementation.handleLaunchOptions(userInfo)
+        }
+    }
 
     @objc func initialize(_ call: CAPPluginCall) {
         guard let appID = call.getString("appID") else {
