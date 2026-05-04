@@ -10,20 +10,32 @@ import android.provider.Settings;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationManagerCompat;
 import com.getcapacitor.Logger;
+import com.getcapacitor.Plugin;
 import com.onesignal.OneSignal;
 import com.onesignal.debug.LogLevel;
+import com.onesignal.OSNotificationClickEvent;
+import com.onesignal.OSNotificationClickListener;
+import org.json.JSONObject;
+import org.json.JSONException;
 
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PermissionState;
 import android.Manifest;
 import androidx.core.app.ActivityCompat;
+import java.util.Iterator;
+import com.getcapacitor.JSObject;
 
-public class CapOneSignal {
+public class CapOneSignal implements OSNotificationClickListener {
+
+    private Plugin plugin;
+    private Context context;
 
     /**
      * Initialize OneSignal with application context and appId.
      */
     public void initialize(Context ctx, String appID) {
+        this.context = ctx;
+        
         if (appID == null || appID.isEmpty()) {
             Logger.warn("CapOneSignal", "initialize: appID is null/empty");
             return;
@@ -34,15 +46,78 @@ public class CapOneSignal {
             return;
         }
 
-        // Special handling for pre-release versions of Android
         if (!"REL".equals(Build.VERSION.CODENAME)) {
             Logger.info("CapOneSignal", "Running on a pre-release version of Android: " + Build.VERSION.CODENAME + ". Enabling verbose logging.");
             OneSignal.getDebug().setLogLevel(LogLevel.VERBOSE);
         }
 
-        // Use the OneSignal v5+ API to initialize with the App ID
         OneSignal.initWithContext(ctx.getApplicationContext(), appID);
+        
+        // Register click listener
+        OneSignal.getNotifications().addClickListener(this);
+        
         Logger.info("CapOneSignal", "OneSignal initialized with appID: " + appID);
+    }
+
+    public void setPlugin(Plugin plugin) {
+        this.plugin = plugin;
+    }
+
+    @Override
+    public void onClick(OSNotificationClickEvent event) {
+        Logger.info("CapOneSignal", "Notification clicked: " + event.getNotification().getNotificationId());
+        
+        try {
+            JSONObject clickData = new JSONObject();
+            
+            // Notification ID
+            clickData.put("notificationId", event.getNotification().getNotificationId());
+            
+            // Launch URL
+            String launchURL = event.getNotification().getLaunchURL();
+            if (launchURL != null) {
+                clickData.put("launchURL", launchURL);
+                Logger.info("CapOneSignal", "Launch URL: " + launchURL);
+                
+                // Open URL if valid
+                try {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(launchURL));
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
+                } catch (Exception e) {
+                    Logger.error("CapOneSignal", "Failed to open launch URL: " + e.getMessage());
+                }
+            }
+            
+            // Additional Data - THIS IS THE KEY PART for your custom data!
+            JSONObject additionalData = event.getNotification().getAdditionalData();
+            if (additionalData != null) {
+                Logger.info("CapOneSignal", "Additional Data: " + additionalData.toString());
+                clickData.put("additionalData", additionalData);
+            } else {
+                Logger.info("CapOneSignal", "No additionalData in notification");
+            }
+            
+            // Notify JavaScript listeners
+            if (plugin != null) {
+                Logger.info("CapOneSignal", "Notifying JavaScript listeners of notification click");
+                
+                JSObject jsClickData;
+                try {
+                    jsClickData = JSObject.fromJSONObject(clickData);
+                } catch (JSONException e) {
+                    Logger.error("CapOneSignal", "Error converting JSONObject to JSObject: " + e.getMessage());
+                    jsClickData = new JSObject(); // Fallback to empty
+                }
+                
+                plugin.notifyListeners("notificationClicked", jsClickData, true);
+            } else {
+                Logger.error("CapOneSignal", "ERROR: plugin reference is null, cannot notify JavaScript");
+            }
+            
+        } catch (JSONException e) {
+            Logger.error("CapOneSignal", "Error building click data: " + e.getMessage());
+        }
     }
 
     /**

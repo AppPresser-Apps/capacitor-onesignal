@@ -24,6 +24,8 @@ npx cap sync
 * [`removeTags(...)`](#removetags)
 * [`addTag(...)`](#addtag)
 * [`removeTag(...)`](#removetag)
+* [`addListener(string, ...)`](#addlistenerstring-)
+* [Interfaces](#interfaces)
 
 </docgen-index>
 
@@ -143,6 +145,36 @@ removeTag(options: { tag: string; }) => Promise<void>
 | **`options`** | <code>{ tag: string; }</code> |
 
 --------------------
+
+
+### addListener(string, ...)
+
+```typescript
+addListener(eventName: string, listenerFunc: (...args: any[]) => void) => Promise<PluginListenerHandle>
+```
+
+Listen for notification clicks.
+When a user taps a push notification containing deeplink data,
+the NotificationClickData will be emitted to all registered listeners.
+
+| Param              | Type                                     |
+| ------------------ | ---------------------------------------- |
+| **`eventName`**    | <code>string</code>                      |
+| **`listenerFunc`** | <code>(...args: any[]) =&gt; void</code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+--------------------
+
+
+### Interfaces
+
+
+#### PluginListenerHandle
+
+| Prop         | Type                                      |
+| ------------ | ----------------------------------------- |
+| **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
 
 </docgen-api>
 

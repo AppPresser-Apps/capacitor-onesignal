@@ -24,6 +24,13 @@ public class CapOneSignalPlugin extends Plugin {
 
     private CapOneSignal implementation = new CapOneSignal();
 
+    @Override
+    public void load() {
+        super.load();
+        // Set plugin reference for notification click callbacks
+        implementation.setPlugin(this);
+    }
+
     @PluginMethod
     public void initialize(PluginCall call) {
         String appId = call.getString("appID");
