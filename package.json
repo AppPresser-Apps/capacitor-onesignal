@@ -1,74 +1,75 @@
 {
   "name": "capacitor-onesignal",
-  "version": "0.0.1",
-  "description": "Capactior plugin for OneSignal Push notifications",
-  "main": "dist/plugin.cjs.js",
-  "module": "dist/esm/index.js",
-  "types": "dist/esm/index.d.ts",
-  "unpkg": "dist/plugin.js",
-  "files": [
-    "android/src/main/",
-    "android/build.gradle",
-    "dist/",
-    "ios/Sources",
-    "ios/Tests",
-    "Package.swift",
-    "Capacitor_onesignal.podspec"
+  "version": "1.0.0",
+  "description": "OneSignal is a high volume Push Notification service for mobile apps. This is the pure Capacitor plugin for OneSignal, providing push notifications, in-app messaging, and more.",
+  "keywords": [
+    "apns",
+    "capacitor",
+    "fcm",
+    "native",
+    "notification",
+    "onesignal",
+    "plugin",
+    "push",
+    "push notification",
+    "push notifications"
   ],
-  "author": "AppPresser",
+  "homepage": "https://github.com/OneSignal/OneSignal-Capacitor-SDK#readme",
+  "bugs": {
+    "url": "https://github.com/OneSignal/OneSignal-Capacitor-SDK/issues"
+  },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AppPresser-Apps/capacitor-onesignal.git"
+    "url": "git+https://github.com/OneSignal/OneSignal-Capacitor-SDK.git"
   },
-  "bugs": {
-    "url": "https://github.com/AppPresser-Apps/capacitor-onesignal/issues"
-  },
-  "keywords": [
-    "capacitor",
-    "plugin",
-    "native"
+  "files": [
+    "dist",
+    "ios",
+    "android",
+    "Package.swift",
+    "OneSignalCapacitorPlugin.podspec"
   ],
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
   "scripts": {
-    "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",
-    "verify:ios": "xcodebuild -scheme Capacitor_onesignal -destination generic/platform=iOS",
-    "verify:android": "cd android && ./gradlew clean build test && cd ..",
-    "verify:web": "npm run build",
-    "lint": "npm run eslint && npm run prettier -- --check && npm run swiftlint -- lint",
-    "fmt": "npm run eslint -- --fix && npm run prettier -- --write && npm run swiftlint -- --fix --format",
-    "eslint": "eslint . --ext ts",
-    "prettier": "prettier \"**/*.{css,html,ts,js,java}\" --plugin=prettier-plugin-java",
-    "swiftlint": "node-swiftlint",
-    "docgen": "docgen --api CapOneSignalPlugin --output-readme README.md --output-json dist/docs.json",
-    "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.mjs",
-    "clean": "rimraf ./dist",
-    "watch": "tsc --watch",
-    "prepublishOnly": "npm run build"
+    "build": "vp pack",
+    "docgen": "docgen --api OneSignalAPI --project tsconfig.docgen.json --output-readme README.md --output-json dist/docs.json",
+    "format": "vp fmt",
+    "format:check": "vp fmt --check",
+    "lint": "vp check src",
+    "lint:fix": "vp check --fix src",
+    "test": "vp test",
+    "test:coverage": "vp test run --coverage",
+    "test:run": "vp test run",
+    "verify": "vp build && vp test run && vp lint"
   },
   "devDependencies": {
-    "@capacitor/android": "^8.0.0",
-    "@capacitor/core": "^8.0.0",
-    "@capacitor/docgen": "^0.3.1",
-    "@capacitor/ios": "^8.0.0",
-    "@ionic/eslint-config": "^0.4.0",
-    "@ionic/prettier-config": "^4.0.0",
-    "@ionic/swiftlint-config": "^2.0.0",
-    "eslint": "^8.57.1",
-    "prettier": "^3.6.2",
-    "prettier-plugin-java": "^2.7.7",
-    "rimraf": "^6.1.0",
-    "rollup": "^4.53.2",
-    "swiftlint": "^2.0.0",
-    "typescript": "^5.9.3"
+    "@capacitor/core": "^7.0.0",
+    "@capacitor/docgen": "^0.2.2",
+    "@types/bun": "latest",
+    "@vitest/coverage-v8": "^4.1.2",
+    "happy-dom": "^20.9.0",
+    "typescript": "^5.9.3",
+    "vite": "npm:@voidzero-dev/vite-plus-core@latest",
+    "vite-plus": "0.1.20"
   },
   "peerDependencies": {
-    "@capacitor/core": ">=8.0.0"
+    "@capacitor/core": "^7.0.0"
   },
-  "prettier": "@ionic/prettier-config",
-  "swiftlint": "@ionic/swiftlint-config",
-  "eslintConfig": {
-    "extends": "@ionic/eslint-config/recommended"
+  "overrides": {
+    "vite": "npm:@voidzero-dev/vite-plus-core@latest",
+    "vitest": "npm:@voidzero-dev/vite-plus-test@latest"
   },
+  "packageManager": "bun@1.3.11",
   "capacitor": {
     "ios": {
       "src": "ios"

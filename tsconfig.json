@@ -1,20 +1,19 @@
 {
   "compilerOptions": {
-    "allowUnreachableCode": false,
+    "outDir": "dist",
+    "target": "es2020",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "noImplicitAny": true,
+    "lib": ["es2020", "dom"],
+    "skipLibCheck": true,
     "declaration": true,
+    "declarationDir": "dist",
+    "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "inlineSources": true,
-    "lib": ["dom", "es2017"],
-    "module": "esnext",
-    "moduleResolution": "node",
-    "noFallthroughCasesInSwitch": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "outDir": "dist/esm",
-    "pretty": true,
-    "sourceMap": true,
     "strict": true,
-    "target": "es2017"
+    "noUnusedLocals": true,
+    "types": []
   },
-  "files": ["src/index.ts"]
+  "include": ["src", "mocks"]
 }

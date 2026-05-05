@@ -1,10 +1,38 @@
 import { registerPlugin } from '@capacitor/core';
 
-import type { CapOneSignalPlugin } from './definitions';
+import type { OneSignalCapacitorPlugin } from './definitions';
+import { OneSignalPlugin } from './OneSignalPlugin';
 
-const CapOneSignal = registerPlugin<CapOneSignalPlugin>('CapOneSignal', {
-  web: () => import('./web').then((m) => new m.CapOneSignalWeb()),
-});
+const OneSignalCapacitor = registerPlugin<OneSignalCapacitorPlugin>('OneSignalCapacitor');
 
-export * from './definitions';
-export { CapOneSignal };
+const OneSignal = new OneSignalPlugin(OneSignalCapacitor);
+
+export { LogLevel } from './DebugNamespace';
+export { NotificationWillDisplayEvent } from './NotificationReceivedEvent';
+export { OSNotificationPermission } from './NotificationsNamespace';
+export { OSNotification } from './OSNotification';
+export { OneSignalPlugin } from './OneSignalPlugin';
+
+export type {
+  PushSubscriptionChangedState,
+  PushSubscriptionState,
+} from './PushSubscriptionNamespace';
+
+export type { NotificationClickEvent, NotificationClickResult } from './types/NotificationClicked';
+
+export type {
+  InAppMessageActionUrlType,
+  InAppMessageClickEvent,
+  InAppMessageClickResult,
+  InAppMessageDidDismissEvent,
+  InAppMessageDidDisplayEvent,
+  InAppMessageWillDismissEvent,
+  InAppMessageWillDisplayEvent,
+  OSInAppMessage,
+} from './types/InAppMessage';
+
+export type { UserChangedState, UserState } from './UserNamespace';
+
+export type { OneSignalCapacitorPlugin } from './definitions';
+
+export default OneSignal;
