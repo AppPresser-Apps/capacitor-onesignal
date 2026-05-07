@@ -112,6 +112,17 @@ export default class Notifications implements OneSignalNotificationsAPI {
         void this._plugin.addListener('notificationClick', (json: NotificationClickEvent) => {
           this._processFunctionList(this._notificationClickedListeners, json);
         });
+        // Check for any click event cached on the native side before this listener was registered.
+        // This handles cold-start notification taps on iOS where the click event fires during
+        // OneSignal.initialize() — before the JS side has a chance to register this listener.
+        void this._plugin.getPendingNotificationClickEvent().then((pending) => {
+          if (pending) {
+            this._processFunctionList(
+              this._notificationClickedListeners,
+              pending as unknown as NotificationClickEvent,
+            );
+          }
+        });
       }
     } else if (event === 'foregroundWillDisplay') {
       this._notificationWillDisplayListeners.push(

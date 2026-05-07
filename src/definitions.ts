@@ -81,4 +81,7 @@ export interface OneSignalCapacitorPlugin extends Plugin {
     attributes: Record<string, unknown>;
     content: Record<string, unknown>;
   }): Promise<void>;
+
+  // Pending Events
+  getPendingNotificationClickEvent(): Promise<Record<string, unknown> | null>;
 }

@@ -1,5 +1,5 @@
-import Foundation
 import Capacitor
+import Foundation
 import OneSignalFramework
 import OneSignalLiveActivities
 
@@ -11,7 +11,8 @@ public class OneSignalCapacitorPlugin: CAPPlugin, CAPBridgedPlugin,
     OSPushSubscriptionObserver,
     OSInAppMessageLifecycleListener,
     OSInAppMessageClickListener,
-    OSUserStateObserver {
+    OSUserStateObserver
+{
 
     public let identifier = "OneSignalCapacitorPlugin"
     public let jsName = "OneSignalCapacitor"
@@ -45,7 +46,8 @@ public class OneSignalCapacitorPlugin: CAPPlugin, CAPBridgedPlugin,
         CAPPluginMethod(name: "permissionNative", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "requestPermission", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "canRequestPermission", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "registerForProvisionalAuthorization", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(
+            name: "registerForProvisionalAuthorization", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "clearAllNotifications", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "removeNotification", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "removeGroupedNotifications", returnType: CAPPluginReturnPromise),
@@ -282,9 +284,10 @@ public class OneSignalCapacitorPlugin: CAPPlugin, CAPBridgedPlugin,
 
     @objc func requestPermission(_ call: CAPPluginCall) {
         let fallback = call.getBool("fallbackToSettings") ?? false
-        OneSignal.Notifications.requestPermission({ accepted in
-            call.resolve(["permission": accepted])
-        }, fallbackToSettings: fallback)
+        OneSignal.Notifications.requestPermission(
+            { accepted in
+                call.resolve(["permission": accepted])
+            }, fallbackToSettings: fallback)
     }
 
     @objc func canRequestPermission(_ call: CAPPluginCall) {
@@ -438,15 +441,19 @@ public class OneSignalCapacitorPlugin: CAPPlugin, CAPBridgedPlugin,
 
     @objc func enterLiveActivity(_ call: CAPPluginCall) {
         guard let activityId = call.getString("activityId"),
-              let token = call.getString("token") else {
+            let token = call.getString("token")
+        else {
             call.reject("activityId and token are required")
             return
         }
-        OneSignal.LiveActivities.enter(activityId, withToken: token, withSuccess: { _ in
-            call.resolve()
-        }, withFailure: { error in
-            call.reject(error?.localizedDescription ?? "Unknown error")
-        })
+        OneSignal.LiveActivities.enter(
+            activityId, withToken: token,
+            withSuccess: { _ in
+                call.resolve()
+            },
+            withFailure: { error in
+                call.reject(error?.localizedDescription ?? "Unknown error")
+            })
     }
 
     @objc func exitLiveActivity(_ call: CAPPluginCall) {
@@ -454,77 +461,85 @@ public class OneSignalCapacitorPlugin: CAPPlugin, CAPBridgedPlugin,
             call.reject("activityId is required")
             return
         }
-        OneSignal.LiveActivities.exit(activityId, withSuccess: { _ in
-            call.resolve()
-        }, withFailure: { error in
-            call.reject(error?.localizedDescription ?? "Unknown error")
-        })
+        OneSignal.LiveActivities.exit(
+            activityId,
+            withSuccess: { _ in
+                call.resolve()
+            },
+            withFailure: { error in
+                call.reject(error?.localizedDescription ?? "Unknown error")
+            })
     }
 
     @objc func setPushToStartToken(_ call: CAPPluginCall) {
         #if !targetEnvironment(macCatalyst)
-        guard let activityType = call.getString("activityType"),
-              let token = call.getString("token") else {
-            call.reject("activityType and token are required")
-            return
-        }
-        if #available(iOS 17.2, *) {
-            do {
-                try OneSignalLiveActivitiesManagerImpl.setPushToStartToken(activityType, withToken: token)
-            } catch {
-                call.reject("activityType must be the name of your ActivityAttributes struct")
+            guard let activityType = call.getString("activityType"),
+                let token = call.getString("token")
+            else {
+                call.reject("activityType and token are required")
                 return
             }
-        }
+            if #available(iOS 17.2, *) {
+                do {
+                    try OneSignalLiveActivitiesManagerImpl.setPushToStartToken(
+                        activityType, withToken: token)
+                } catch {
+                    call.reject("activityType must be the name of your ActivityAttributes struct")
+                    return
+                }
+            }
         #endif
         call.resolve()
     }
 
     @objc func removePushToStartToken(_ call: CAPPluginCall) {
         #if !targetEnvironment(macCatalyst)
-        guard let activityType = call.getString("activityType") else {
-            call.reject("activityType is required")
-            return
-        }
-        if #available(iOS 17.2, *) {
-            do {
-                try OneSignalLiveActivitiesManagerImpl.removePushToStartToken(activityType)
-            } catch {
-                call.reject("activityType must be the name of your ActivityAttributes struct")
+            guard let activityType = call.getString("activityType") else {
+                call.reject("activityType is required")
                 return
             }
-        }
+            if #available(iOS 17.2, *) {
+                do {
+                    try OneSignalLiveActivitiesManagerImpl.removePushToStartToken(activityType)
+                } catch {
+                    call.reject("activityType must be the name of your ActivityAttributes struct")
+                    return
+                }
+            }
         #endif
         call.resolve()
     }
 
     @objc func setupDefaultLiveActivity(_ call: CAPPluginCall) {
         #if !targetEnvironment(macCatalyst)
-        if #available(iOS 16.1, *) {
-            var laOptions: LiveActivitySetupOptions? = nil
-            if let enablePushToStart = call.getBool("enablePushToStart"),
-               let enablePushToUpdate = call.getBool("enablePushToUpdate") {
-                laOptions = LiveActivitySetupOptions()
-                laOptions?.enablePushToStart = enablePushToStart
-                laOptions?.enablePushToUpdate = enablePushToUpdate
+            if #available(iOS 16.1, *) {
+                var laOptions: LiveActivitySetupOptions? = nil
+                if let enablePushToStart = call.getBool("enablePushToStart"),
+                    let enablePushToUpdate = call.getBool("enablePushToUpdate")
+                {
+                    laOptions = LiveActivitySetupOptions()
+                    laOptions?.enablePushToStart = enablePushToStart
+                    laOptions?.enablePushToUpdate = enablePushToUpdate
+                }
+                OneSignalLiveActivitiesManagerImpl.setupDefault(options: laOptions)
             }
-            OneSignalLiveActivitiesManagerImpl.setupDefault(options: laOptions)
-        }
         #endif
         call.resolve()
     }
 
     @objc func startDefaultLiveActivity(_ call: CAPPluginCall) {
         #if !targetEnvironment(macCatalyst)
-        guard let activityId = call.getString("activityId"),
-              let attributes = call.getObject("attributes"),
-              let content = call.getObject("content") else {
-            call.reject("activityId, attributes, and content are required")
-            return
-        }
-        if #available(iOS 16.1, *) {
-            OneSignalLiveActivitiesManagerImpl.startDefault(activityId, attributes: attributes, content: content)
-        }
+            guard let activityId = call.getString("activityId"),
+                let attributes = call.getObject("attributes"),
+                let content = call.getObject("content")
+            else {
+                call.reject("activityId, attributes, and content are required")
+                return
+            }
+            if #available(iOS 16.1, *) {
+                OneSignalLiveActivitiesManagerImpl.startDefault(
+                    activityId, attributes: attributes, content: content)
+            }
         #endif
         call.resolve()
     }
@@ -544,10 +559,12 @@ public class OneSignalCapacitorPlugin: CAPPlugin, CAPBridgedPlugin,
         if let id = state.current.id { current["id"] = id }
         if let token = state.current.token { current["token"] = token }
 
-        notifyListeners("pushSubscriptionChange", data: [
-            "previous": previous,
-            "current": current
-        ])
+        notifyListeners(
+            "pushSubscriptionChange",
+            data: [
+                "previous": previous,
+                "current": current,
+            ])
     }
 
     public func onUserStateDidChange(state: OSUserChangedState) {
@@ -563,7 +580,8 @@ public class OneSignalCapacitorPlugin: CAPPlugin, CAPBridgedPlugin,
         notificationWillDisplayCache[notificationId] = event
         event.preventDefault()
         if let data = event.notification.stringify().data(using: .utf8),
-           let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] {
+            let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any]
+        {
             notifyListeners("notificationForegroundWillDisplay", data: json)
         }
     }
@@ -578,37 +596,46 @@ public class OneSignalCapacitorPlugin: CAPPlugin, CAPBridgedPlugin,
 
     private func sendNotificationClickEvent(_ event: OSNotificationClickEvent) {
         if let data = event.stringify().data(using: .utf8),
-           let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] {
+            let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any]
+        {
             notifyListeners("notificationClick", data: json)
         }
     }
 
     @objc(onWillDisplayInAppMessage:)
     public func onWillDisplay(event: OSInAppMessageWillDisplayEvent) {
-        notifyListeners("inAppMessageWillDisplay", data: [
-            "message": ["messageId": event.message.messageId]
-        ])
+        notifyListeners(
+            "inAppMessageWillDisplay",
+            data: [
+                "message": ["messageId": event.message.messageId]
+            ])
     }
 
     @objc(onDidDisplayInAppMessage:)
     public func onDidDisplay(event: OSInAppMessageDidDisplayEvent) {
-        notifyListeners("inAppMessageDidDisplay", data: [
-            "message": ["messageId": event.message.messageId]
-        ])
+        notifyListeners(
+            "inAppMessageDidDisplay",
+            data: [
+                "message": ["messageId": event.message.messageId]
+            ])
     }
 
     @objc(onWillDismissInAppMessage:)
     public func onWillDismiss(event: OSInAppMessageWillDismissEvent) {
-        notifyListeners("inAppMessageWillDismiss", data: [
-            "message": ["messageId": event.message.messageId]
-        ])
+        notifyListeners(
+            "inAppMessageWillDismiss",
+            data: [
+                "message": ["messageId": event.message.messageId]
+            ])
     }
 
     @objc(onDidDismissInAppMessage:)
     public func onDidDismiss(event: OSInAppMessageDidDismissEvent) {
-        notifyListeners("inAppMessageDidDismiss", data: [
-            "message": ["messageId": event.message.messageId]
-        ])
+        notifyListeners(
+            "inAppMessageDidDismiss",
+            data: [
+                "message": ["messageId": event.message.messageId]
+            ])
     }
 
     public func onClick(event: OSInAppMessageClickEvent) {
@@ -631,9 +658,11 @@ public class OneSignalCapacitorPlugin: CAPPlugin, CAPBridgedPlugin,
         }
         clickResult["urlTarget"] = urlTargetStr
 
-        notifyListeners("inAppMessageClick", data: [
-            "message": ["messageId": event.message.messageId],
-            "result": clickResult
-        ])
+        notifyListeners(
+            "inAppMessageClick",
+            data: [
+                "message": ["messageId": event.message.messageId],
+                "result": clickResult,
+            ])
     }
 }
